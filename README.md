@@ -4,5 +4,5 @@ A bash script for setting-up passwordless ssh login. Duplicate authorized keys a
 
 Depends: expect ssh-keygen
 
-Usage: ./ssh_auth.sh <remote_host> <remote_user> <remote_password>
+Usage: ./ssh_auth.sh $remote_host $remote_user $remote_password
 
