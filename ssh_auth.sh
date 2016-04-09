@@ -51,6 +51,7 @@ spawn ssh $user@$host "
 	echo '$authorized_key' >> ~/.ssh/authorized_keys;
 	sort ~/.ssh/authorized_keys | uniq > ~/.ssh/authorized_keys_tmp;
 	/bin/mv ~/.ssh/authorized_keys_tmp ~/.ssh/authorized_keys;
+	restorecon -Rv ~/.ssh/;
 "
 expect {
 	"(yes/no)?" { exp_send "yes\n" ; exp_continue }
