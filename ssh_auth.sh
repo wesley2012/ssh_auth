@@ -47,7 +47,7 @@ expect << EOF
 set timeout 30
 
 spawn ssh $user@$host "
-	test -e ~/.ssh || mkdir ~/.ssh && chmod 755 ~/.ssh;
+	test -e ~/.ssh || mkdir ~/.ssh && chmod 700 ~/.ssh;
 	echo '$authorized_key' >> ~/.ssh/authorized_keys;
 	sort ~/.ssh/authorized_keys | uniq > ~/.ssh/authorized_keys_tmp;
 	/bin/mv ~/.ssh/authorized_keys_tmp ~/.ssh/authorized_keys;
