@@ -20,22 +20,22 @@ ssh-keygen -f ~/.ssh/known_hosts -R $host >/dev/null 2>&1
 expect << EOF
 set timeout 30
 
-spawn ssh $user@$host true
+spawn ssh -o PasswordAuthentication=no $user@$host true
 expect {
-	"(yes/no)?" { exit 1 }
+	"(yes/no)?" { exp_send "yes\n" ; exp_continue }
 	"*'s password:" { exit 1 }
 	"No route to host" { exit 2 }
 	"Permission denied" { exit 1 }
 	eof { 
-		catch wait result
-		exit [lrange \$result 3 3]
 	}
 }
 EOF
 
-ret=$?
-test $ret = 0 && exit 0
-test $ret = 2 && exit 2
+if [ $? = 0 ]; then
+    if ssh -o PasswordAuthentication=no $user@$host true; then
+        exit 0
+    fi
+fi
 
 if [ ! -r $key ]; then
 	ssh-keygen -q -f $key -N '' -t rsa
@@ -50,10 +50,8 @@ expect {
 	"Permission denied" { exit 1 }
 	"*'s password:" { exp_send "$passwd\n" ; exp_continue }
 	"No route to host" { exit 2 }
-	eof { 
-		catch wait result
-		exit [lrange \$result 3 3]
-	}
 }
 EOF
+
+ssh -o PasswordAuthentication=no $user@$host true
 
